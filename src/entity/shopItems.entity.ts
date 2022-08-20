@@ -1,7 +1,15 @@
-import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import {
+  BaseEntity,
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+} from 'typeorm';
+import { ShopItemDto } from '../dto/shop-item.dto';
+import { basketEntity } from './basket.entity';
 
 @Entity()
-export class shopItemsEntity extends BaseEntity {
+export class shopItemsEntity extends BaseEntity implements ShopItemDto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
@@ -13,9 +21,18 @@ export class shopItemsEntity extends BaseEntity {
   @Column()
   description: string;
 
-  @Column()
+  @Column({
+    type: 'float',
+    precision: 7,
+    scale: 2,
+  })
   price: number;
 
-  @Column()
+  @Column({
+    type: 'int',
+  })
   amount: number;
+
+  @OneToMany(() => basketEntity, (entity) => entity.items)
+  itemsInBasket: basketEntity[];
 }
