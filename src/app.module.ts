@@ -5,6 +5,7 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ShopModule } from './shop/shop.module';
 import { BasketModule } from './basket/basket.module';
+import { UserModule } from './user/user.module';
 import dbConfig from './config/dbConfig';
 
 @Module({
@@ -13,6 +14,7 @@ import dbConfig from './config/dbConfig';
     TypeOrmModule.forRoot(dbConfig()),
     ShopModule,
     BasketModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
