@@ -6,9 +6,10 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { basketEntity } from './basket.entity';
+import { UserDto } from '../dto/user.dto';
 
 @Entity()
-export class userEntity extends BaseEntity {
+export class userEntity extends BaseEntity implements UserDto {
   @PrimaryGeneratedColumn('uuid')
   id: string;
   @Column({
