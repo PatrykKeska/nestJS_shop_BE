@@ -7,6 +7,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { BasketService } from './basket.service';
+import { BasketDto } from '../dto/basket.dto';
 
 @Controller('/basket')
 export class BasketController {
@@ -26,7 +27,13 @@ export class BasketController {
   }
 
   @Post('/add')
-  async addNewItemToBasket(@Body() item) {
+  async addNewItemToBasket(@Body() item: BasketDto) {
     return this.basketService.addItemToBasket(item);
+  }
+
+  @Post('/check')
+  async check(@Body() item) {
+    const { itemID, userID } = item;
+    return await this.basketService.findItemInBasket(userID, itemID);
   }
 }
