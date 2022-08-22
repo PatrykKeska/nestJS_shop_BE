@@ -15,8 +15,8 @@ export class ShopService {
     });
   }
 
-  async findAvailableProductById(id): Promise<ShopItemDto> {
-    return await shopItemsEntity.findOneOrFail({ where: { id } });
+  async findAvailableProductById(itemID): Promise<ShopItemDto> {
+    return await shopItemsEntity.findOneOrFail({ where: { id: itemID } });
   }
 
   async addOneProduct(item: ShopItemDto): Promise<ShopItemDto> {
@@ -30,7 +30,7 @@ export class ShopService {
     return newItem;
   }
 
-  async updateProductAmount(id: string, amount: number) {
+  async updateProductAmount(id, amount) {
     const item = await shopItemsEntity.findOneOrFail({ where: { id: id } });
     item.amount = item.amount - amount;
     await item.save();
