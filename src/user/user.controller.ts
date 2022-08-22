@@ -13,4 +13,10 @@ export class UserController {
     const { email } = user;
     return await this.userService.createNewUser(email);
   }
+
+  @Post('/basket')
+  async getUserProducts(@Body() user) {
+    const { id } = user;
+    return await this.userService.getUserProducts(id);
+  }
 }

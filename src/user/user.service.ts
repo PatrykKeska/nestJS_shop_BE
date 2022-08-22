@@ -6,13 +6,20 @@ export class UserService {
   async createNewUser(email: string) {
     const isExist = await this.getOneUserByEmail(email);
     if (!isExist) {
-      const user = new userEntity();
-      user.email = email;
-      await user.save();
-      return {
-        isSuccess: true,
-        message: `user ${user.email} successfully created!, id for new user :${user.id}`,
-      };
+      if (email.includes('@')) {
+        const user = new userEntity();
+        user.email = email;
+        await user.save();
+        return {
+          isSuccess: true,
+          message: `user ${user.email} successfully created!, id for new user :${user.id}`,
+        };
+      } else {
+        return {
+          isSuccess: false,
+          message: `email type : ${email} is incorrect!}`,
+        };
+      }
     } else {
       return {
         isSuccess: false,
@@ -24,6 +31,26 @@ export class UserService {
   async getOneUserByEmail(email: string) {
     return await userEntity.findOne({
       where: { email },
+    });
+  }
+
+  async getOneUserByID(id: string) {
+    return await userEntity.findOne({
+      where: { id },
+    });
+  }
+
+  async CheckProduct(id: string) {
+    return await userEntity.findOne({
+      where: { id },
+      relations: ['itemsInBasket'],
+    });
+  }
+
+  async getUserProducts(id: string) {
+    return await userEntity.findOne({
+      where: { id },
+      relations: ['itemsInBasket'],
     });
   }
 }
