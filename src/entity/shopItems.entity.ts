@@ -33,6 +33,12 @@ export class shopItemsEntity extends BaseEntity implements ShopItemDto {
   })
   amount: number;
 
+  @Column({
+    default: null,
+    nullable: true,
+  })
+  photoFn: string;
+
   @OneToMany(() => basketEntity, (entity) => entity.items)
   itemsInBasket: basketEntity[];
 }

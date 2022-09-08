@@ -4,11 +4,14 @@ import { basketEntity } from '../entity/basket.entity';
 import { BasketDto } from '../dto/basket.dto';
 import { UserService } from '../user/user.service';
 import { DataSource } from 'typeorm';
+import { MailService } from '../mail/mail.service';
+import { addedToBasketEmailTemplate } from '../templates/email/added-to-basket';
 
 @Injectable()
 export class BasketService {
   constructor(
     @Inject(DataSource) private dataSource: DataSource,
+    @Inject(MailService) private mailService: MailService,
     @Inject(forwardRef(() => ShopService))
     private shopService: ShopService,
     @Inject(forwardRef(() => UserService)) private userService: UserService,
@@ -33,8 +36,9 @@ export class BasketService {
     return await this.shopService.findAvailableProductByName(name);
   }
 
-  async addItemToBasket(data: BasketDto) {
-    const { itemID, amount, userID } = data;
+  async addItemToBasket(data: BasketDto, user) {
+    const { itemID, amount } = data;
+    const { id: userID } = user;
     const isExist = await this.findItemInBasket(userID, itemID);
     const itemInShop = await this.shopService.findAvailableProductById(itemID);
     if (itemInShop) {
@@ -50,6 +54,11 @@ export class BasketService {
           basket.user = userID;
           await basket.save();
           await this.shopService.updateProductAmount(itemID, amount);
+          await this.mailService.newEmail(
+            'PatrykKeska4@gmail.com',
+            'This is Subject',
+            addedToBasketEmailTemplate(),
+          );
           return basket;
         } else {
           const updateBasket = await this.dataSource

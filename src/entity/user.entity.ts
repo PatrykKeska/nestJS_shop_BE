@@ -18,6 +18,15 @@ export class userEntity extends BaseEntity implements UserDto {
   })
   email: string;
 
+  @Column()
+  pwdHash: string;
+
+  @Column({
+    nullable: true,
+    default: null,
+  })
+  currentTokenId: string | null;
+
   @OneToMany(() => basketEntity, (entity) => entity.user)
   itemsInBasket: basketEntity[];
 }

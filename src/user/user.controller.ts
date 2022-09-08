@@ -8,10 +8,11 @@ export class UserController {
     @Inject(forwardRef(() => UserService)) private userService: UserService,
   ) {}
 
-  @Post('/add')
+  @Post('/register')
   async addNewUser(@Body() user: createNewUser) {
-    const { email } = user;
-    return await this.userService.createNewUser(email);
+    const { email, pwd } = user;
+    console.log(email, pwd);
+    return await this.userService.createNewUser(email, pwd);
   }
 
   @Post('/basket')
